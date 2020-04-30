@@ -1,0 +1,389 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Карта книги </title><style>body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+a, a:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.hidden{
+  display: none;
+}
+
+.title {
+  color: darkgreen;
+}
+
+.column-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-box {
+  display: flex;
+  flex-direction: row;
+}
+
+button {
+  padding: 15px;
+  margin-top: 15px;
+  border: 2px solid green;
+  border-radius: 4px;
+  font: inherit;
+  color: inherit;
+  background-color: white;
+  cursor: pointer;
+}
+
+#control {
+  background-color: #c6faff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+#control h4 {
+  text-align: center;
+}
+
+#new-book,  #new-reader{
+  background-color: #faffac;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+#new-reader {
+  height: 315px;
+  width: 250px
+}
+
+#new-reader h4 {
+  font-size: 18px;
+}
+
+#new-book input, #new-reader input{
+  height: 40px;
+  padding-left: 10px;
+  margin-bottom: 15px;
+  outline: none;
+  border: 1px solid #3a3a3a;
+  border-radius: 2px;
+}
+
+#tab-books, #book-card {
+  width: 450px;
+  background-color: #ffbbc7;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+#book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px
+}
+
+#editName {
+  width: 97%;
+  margin: 0 auto;
+  height: 40px;
+  font-size: 18px;
+  padding-left: 10px;
+}
+
+.book-element {
+  background-color: #ff97a1;
+  margin: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-element {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
+  min-width: 100px;
+}
+
+.card-element h5, .card-element p, .card-element input{
+  margin: 0;
+  font-size: 14px;
+}
+
+.card-element input {
+  height: 20px;
+  max-width: 200px;
+  min-width: 100px;
+  padding-left: 10px;
+}
+
+#id{
+  display: none;
+}
+
+#edit-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+#return-element button, #edit-panel button{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.home-link {
+  margin: 0 auto;
+  color: #ff5854;
+  font-weight: 700;
+}
+</style></head><body><input id="id" readonly><div class="column-box"><div class="row-box"><div class="column-box"><div id="new-reader"><h4>Выдать книгу:</h4><input id="readerName" placeholder="Имя читателя" required><input id="dateOfBegin" type="date" placeholder="Дата взятия" required><input id="dateOfEnd" type="date" placeholder="Дата сдачи" required><button id="add">Выдать книгу</button></div><a class="home-link" href="/">Вернуться к списку книг</a></div><div class="column-box title" id="book-card"><div><h1 id="name">""</h1><input class="hidden" id="editName" placeholder="Введите имя"><div class="row-box"><div class="card-element"><h5>Автор:</h5><p id="author"></p><input class="hidden" id="editAuthor" placeholder="Введите автора"></div><div class="card-element"><h5>Дата выхода:</h5><p id="releaseDate"></p><input class="hidden" id="editDateOfRelease" type="date" placeholder="Введите дату"></div></div><div class="row-box"><div class="card-element"><h5>В наличии:</h5><p id="stock"></p></div><div class="card-element"><h5>Просрочена:</h5><p id="expired"></p></div></div><div class="card-element"><h5>Список всех читателей:</h5><p id="allReaders"></p></div><div class="card-element"><h5>Текущий читатель:</h5><p id="currentReader"></p></div><div id="return-element"><button id="return">Вернуть книгу</button></div><div id="edit-panel"><button id="edit">Редактировать книгу</button><button class="hidden" id="cancelEdit">Отменить редактирование</button><button class="hidden" id="saveEdit">Сохранить данные</button></div></div></div></div></div></body><script>let books = [];
+let book = [];
+let readers = [];
+let reader = {};
+let str = ' ';
+let stockText = ' ';
+let expiredText = ' ';
+
+let id = document.getElementById('id').getAttribute('value');
+let name = document.getElementById('name');
+let author = document.getElementById('author');
+let releaseDate = document.getElementById('releaseDate');
+let stock = document.getElementById('stock');
+let expired = document.getElementById('expired');
+let allReaders = document.getElementById('allReaders');
+let currentReader = document.getElementById('currentReader');
+let returnElement = document.getElementById('return-element');
+let editName = document.getElementById('editName');
+let editAuthor = document.getElementById('editAuthor');
+let editDateOfRelease = document.getElementById('editDateOfRelease');
+let edit = document.getElementById('edit');
+let saveEdit = document.getElementById('saveEdit');
+let cancelEdit = document.getElementById('cancelEdit');
+let addButton = document.querySelector('#add');
+let returnButton = document.querySelector('#return');
+
+addButton.addEventListener('click', addReader,true);
+edit.addEventListener('click', editBook,true);
+cancelEdit.addEventListener('click', cancelEditBook, true);
+saveEdit.addEventListener('click', saveEditBook, true);
+returnButton.addEventListener('click', returnBook, true);
+
+render(id);
+
+function render(id){
+    str = '';
+    books = [];
+    fetch('http://localhost:3000/getData')
+        .then( res => { return res.json()})
+        .then( data => {
+            console.log('Data: ', data);
+            books = data;
+            for (let i = 0; i< books.length; i++) {
+                if (books[i]!==undefined){
+                    if(books[i].id == id){
+                        book = books[i];
+                        console.log('book', book);
+                        name.innerHTML = books[i].name;
+                        author.innerHTML = books[i].author;
+                        releaseDate.innerHTML = books[i].releaseDate;
+                        if(books[i].inStock) {
+                            stockText = 'Да';
+                            expiredText = 'Нет';
+                        }  else {
+                            stockText = 'Нет';
+                            expiredText = 'Нет';
+                            if(books[i].expired) {
+                                expiredText = 'Да'
+                            }
+                            if(Date.now() > Date.parse(book.currentReader.dateOfEnd)) {
+                                changeExpire(id);
+                                expiredText = 'Да';
+                                console.log('Книга просрочена');
+                            } else {
+                                console.log("Книга не просрочена");
+                                expiredText = 'Нет';
+                            }
+                        }
+                        stock.innerHTML = stockText;
+                        expired.innerHTML = expiredText;
+                        for (let j = 0; j< books[i].allReaders.length; j++) {
+                            str +='<div class="card-element"><p><strong>Имя: </strong>'+books[i].allReaders[j].name+'.</p><p><strong>Дата взятия: </strong> '+books[i].allReaders[j].dateOfBegin+'. </p><p><strong>Дата сдачи: </strong> '+books[i].allReaders[j].dateOfEnd+'.</div>';
+                        }
+                        allReaders.innerHTML = str;
+                        str ='<div class="card-element"><p><strong>Имя: </strong>'+books[i].currentReader.name+'.</p><p><strong>Дата взятия: </strong> '+books[i].currentReader.dateOfBegin+'. </p><p><strong>Дата сдачи: </strong> '+books[i].currentReader.dateOfEnd+'.</div>';
+                        currentReader.innerHTML = str;
+                        if(books[i].currentReader.name == ""){
+                            returnElement.classList.add('hidden');
+                        } else {
+                            returnElement.classList.remove('hidden');
+                        }
+
+                    }
+
+                }
+            }
+
+        });
+
+}
+
+function changeExpire(id){
+    // book = {
+    //     id: book.id,
+    //     name: book.name,
+    //     author: book.author,
+    //     releaseDate: book.releaseDate,
+    //     inStock: false,
+    //     expired: true,
+    //     allReaders: book.allReaders,
+    //     currentReader: book.currentReader
+    // };
+    // console.log('Expired book object', book);
+    // books.splice(id,1,book);
+    // console.log('Books array', books);
+    // fetch('http://localhost:3000/setData',{
+    //     method: 'post',
+    //     body: JSON.stringify(books),
+    //     headers:{'content-type': 'application/json'}
+    // })
+    //     .then(function(res){ return res.json(); })
+    //     .then(function(data){ console.log('Set data request from client', JSON.stringify( data ) ) });
+    // render(id);
+}
+
+function addReader(){
+    var readerName = document.querySelector('#readerName').value;
+    var dateOfBegin = document.querySelector('#dateOfBegin').value;
+    var dateOfEnd = document.querySelector('#dateOfEnd').value;
+    console.log('Add reader', readerName, ' ', dateOfBegin, ' ', dateOfEnd);
+    readers = book.allReaders;
+
+    if(readerName && dateOfBegin && dateOfEnd) {
+        reader = {
+            name: readerName,
+            dateOfBegin: dateOfBegin,
+            dateOfEnd: dateOfEnd
+        };
+        readers.push(reader);
+        book = {
+            id: book.id,
+            name: book.name,
+            author: book.author,
+            releaseDate: book.releaseDate,
+            inStock: false,
+            expired: false,
+            allReaders: readers,
+            currentReader: reader
+        };
+        console.log('Book object', book);
+        books.splice(id,1,book);
+        console.log('Books array', books);
+        fetch('http://localhost:3000/setData',{
+            method: 'post',
+            body: JSON.stringify(books),
+            headers:{'content-type': 'application/json'}
+        })
+            .then(function(res){ return res.json(); })
+            .then(function(data){ console.log('Set data request from client', JSON.stringify( data ) ) });
+    }
+    render(id);
+}
+
+function editBook(){
+    name.classList.add('hidden');
+    author.classList.add('hidden');
+    releaseDate.classList.add('hidden');
+    edit.classList.add('hidden');
+    cancelEdit.classList.remove('hidden');
+    saveEdit.classList.remove('hidden');
+    editName.classList.remove('hidden');
+    editAuthor.classList.remove('hidden');
+    editDateOfRelease.classList.remove('hidden');
+
+    editName.value = book.name;
+    editAuthor.value = book.author;
+    editDateOfRelease.value = book.releaseDate;
+}
+
+function cancelEditBook() {
+    name.classList.remove('hidden');
+    author.classList.remove('hidden');
+    releaseDate.classList.remove('hidden');
+    edit.classList.remove('hidden');
+    cancelEdit.classList.add('hidden');
+    saveEdit.classList.add('hidden');
+    editName.classList.add('hidden');
+    editAuthor.classList.add('hidden');
+    editDateOfRelease.classList.add('hidden');
+}
+
+function saveEditBook(){
+    if(editName.value && editAuthor.value && editDateOfRelease.value) {
+        book = {
+            id: book.id,
+            name: editName.value,
+            author: editAuthor.value,
+            releaseDate: editDateOfRelease.value,
+            inStock: false,
+            expired: false,
+            allReaders: book.allReaders,
+            currentReader: book.currentReader
+        };
+        console.log('Saved book object', book);
+        books.splice(id,1,book);
+        console.log('Books array', books);
+        fetch('http://localhost:3000/setData',{
+            method: 'post',
+            body: JSON.stringify(books),
+            headers:{'content-type': 'application/json'}
+        })
+            .then(function(res){ return res.json(); })
+            .then(function(data){ console.log('Set data request from client', JSON.stringify( data ) ) });
+    }
+    cancelEditBook();
+    render(id);
+}
+
+function returnBook(){
+        book = {
+            id: book.id,
+            name: book.name,
+            author: book.author,
+            releaseDate: book.releaseDate,
+            inStock: true,
+            expired: false,
+            allReaders: book.allReaders,
+            currentReader: {
+                name: '',
+                dateOfBegin: '',
+                dateOfEnd: ''
+            }
+        };
+        console.log('Returned book object', book);
+        books.splice(id,1,book);
+        console.log('Books array', books);
+        fetch('http://localhost:3000/setData',{
+            method: 'post',
+            body: JSON.stringify(books),
+            headers:{'content-type': 'application/json'}
+        })
+            .then(function(res){ return res.json(); })
+            .then(function(data){ console.log('Set data request from client', JSON.stringify( data ) ) });
+    render(id);
+}
+
+
+</script></html>

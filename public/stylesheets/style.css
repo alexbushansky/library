@@ -1,0 +1,151 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+a, a:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.hidden{
+  display: none;
+}
+
+.title {
+  color: darkgreen;
+}
+
+.column-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-box {
+  display: flex;
+  flex-direction: row;
+}
+
+button {
+  padding: 15px;
+  margin-top: 15px;
+  border: 2px solid green;
+  border-radius: 4px;
+  font: inherit;
+  color: inherit;
+  background-color: white;
+  cursor: pointer;
+}
+
+#control {
+  background-color: darkcyan;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+#control h4 {
+  text-align: center;
+}
+
+#new-book,  #new-reader{
+  background-color: rosybrown;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+#new-reader {
+  height: 315px;
+  width: 250px
+}
+
+#new-reader h4 {
+  font-size: 18px;
+}
+
+#new-book input, #new-reader input{
+  height: 40px;
+  padding-left: 10px;
+  margin-bottom: 15px;
+  outline: none;
+  border: 1px solid #3a3a3a;
+  border-radius: 2px;
+}
+
+#tab-books, #book-card {
+  width: 450px;
+  background-color: #ffbbc7;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+#book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px
+}
+
+#editName {
+  width: 97%;
+  margin: 0 auto;
+  height: 40px;
+  font-size: 18px;
+  padding-left: 10px;
+}
+
+.book-element {
+  background-color: #ff97a1;
+  margin: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-element {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
+  min-width: 100px;
+}
+
+.card-element h5, .card-element p, .card-element input{
+  margin: 0;
+  font-size: 14px;
+}
+
+.card-element input {
+  height: 20px;
+  max-width: 200px;
+  min-width: 100px;
+  padding-left: 10px;
+}
+
+#id{
+  display: none;
+}
+
+#edit-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+#return-element button, #edit-panel button{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.home-link {
+  margin: 0 auto;
+  color: #ff5854;
+  font-weight: 700;
+}

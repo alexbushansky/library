@@ -1,0 +1,26 @@
+doctype
+html(lang="ru")
+    head
+        meta(charset="utf-8")
+        title="Домашняя библиотека"
+        style
+            include ../public/stylesheets/style.css
+    body
+        div(class="column-box title")
+            h1 Библиотека!
+        div(class="column-box")
+            div(class="row-box")
+                div(id="control")
+                    h4 Управление библиотекой:
+                    button(id="sort-stock") Отфильтровать по наличию
+                    button(id="sort-expire") Отфильтровать по дате
+                div(id="new-book")
+                    h4 Добавить книгу:
+                    input(id="name" placeholder="Name of book" required)
+                    input(id="author" placeholder="Author" required)
+                    input(id="releaseDate" type='date' placeholder="Date of release" required)
+                    button(id="add") Добавить книгу
+        div(id="tab-books" class="column-box")
+            h3 Список книг
+    script
+        include ../public/javascripts/main.js

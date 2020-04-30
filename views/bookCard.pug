@@ -1,0 +1,55 @@
+doctype
+html(lang="ru")
+    head
+        meta(charset="utf-8")
+        title="Карта книги "
+        style
+            include ../public/stylesheets/style.css
+    body
+        input(id="id" readonly value=bookId)
+        div(class="column-box")
+            div(class="row-box")
+                div(class="column-box")
+                    div(id="new-reader")
+                        h4 Выдать книгу:
+                        input(id="readerName" placeholder="Имя читателя" required)
+                        input(id="dateOfBegin" type='date' placeholder="Дата взятия" required)
+                        input(id="dateOfEnd" type='date' placeholder="Дата сдачи" required)
+                        button(id="add") Выдать книгу
+                    a(href='/' class="home-link") Вернуться к списку книг
+                div(id="book-card" class="column-box title")
+                    div
+                        h1(id="name") "#{bookId}"
+                        input(id="editName" class="hidden" placeholder="Введите имя")
+                        div(class="row-box")
+                            div(class="card-element")
+                                h5 Автор:
+                                p(id="author")
+                                input(id="editAuthor" class="hidden" placeholder="Введите автора")
+                            div(class="card-element")
+                                h5 Дата выхода:
+                                p(id="releaseDate")
+                                input(id="editDateOfRelease" class="hidden" type="date" placeholder="Введите дату")
+                        div(class="row-box")
+                            div(class="card-element")
+                                h5 В наличии:
+                                p(id="stock")
+                            div(class="card-element")
+                                h5 Просрочена:
+                                p(id="expired")
+                        div(class="card-element")
+                            h5 Список всех читателей:
+                            p(id="allReaders")
+                        div(class="card-element")
+                            h5 Текущий читатель:
+                            p(id="currentReader")
+                        div(id="return-element")
+                            button(id="return") Вернуть книгу
+                        div(id="edit-panel")
+                            button(id="edit") Редактировать книгу
+                            button(id="cancelEdit" class="hidden") Отменить редактирование
+                            button(id="saveEdit" class="hidden") Сохранить данные
+
+
+    script
+        include ../public/javascripts/card.js
