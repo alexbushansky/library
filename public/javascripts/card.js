@@ -37,7 +37,7 @@ render(id);
 function render(id){
     str = '';
     books = [];
-    fetch('http://localhost:3000/getData')
+    fetch('https://library-new-ai164.herokuapp.com/getData')
         .then( res => { return res.json()})
         .then( data => {
             console.log('Data: ', data);
@@ -119,7 +119,7 @@ function addReader(){
         console.log('Book object', book);
         books.splice(id,1,book);
         console.log('Books array', books);
-        fetch('http://localhost:3000/setData',{
+        fetch('https://library-new-ai164.herokuapp.com/setData',{
             method: 'post',
             body: JSON.stringify(books),
             headers:{'content-type': 'application/json'}
@@ -179,7 +179,7 @@ function saveEditBook(){
         console.log('Saved book object', book);
         books.splice(id,1,book);
         console.log('Books array', books);
-        fetch('http://localhost:3000/setData',{
+        fetch('https://library-new-ai164.herokuapp.com/setData',{
             method: 'post',
             body: JSON.stringify(books),
             headers:{'content-type': 'application/json'}
@@ -211,7 +211,7 @@ function returnBook(){
         console.log('Returned book object', book);
         books.splice(id,1,book);
         console.log('Books array', books);
-        fetch('http://localhost:3000/setData',{
+        fetch('https://library-new-ai164.herokuapp.com/setData',{
             method: 'post',
             body: JSON.stringify(books),
             headers:{'content-type': 'application/json'}

@@ -21,7 +21,7 @@ render();
 function render(){
     str = '';
     books = [];
-    fetch('http://localhost:3000/getData')
+    fetch('https://library-new-ai164.herokuapp.com/getData')
         .then( res => { return res.json()})
         .then( data => {
             console.log('Data: ', data);
@@ -74,7 +74,7 @@ function addBook(){
         books.push(book);
         console.log('Books array', book);
         console.log('Book date', bookReleaseDate.valueOf());
-        fetch('http://localhost:3000/setData',{
+        fetch('https://library-new-ai164.herokuapp.com/setData',{
             method: 'post',
             body: JSON.stringify(books),
             headers:{'content-type': 'application/json'}
@@ -130,7 +130,7 @@ function sortByExpire(){
 function deleteBook(index) {
     books.splice(index,1);
     console.log('Books array', books);
-    fetch('http://localhost:3000/setData',{
+    fetch('https://library-new-ai164.herokuapp.com/setData',{
         method: 'post',
         body: JSON.stringify(books),
         headers:{'content-type': 'application/json'}
